@@ -96,15 +96,15 @@ class ScarletToken:
 
 class ScarletUser:
 
-    attributes = [
+    attributes: 'list[str]' = [
         "username", "password", "email", "uid", "token"
     ]
 
-    username = ScarletUsername()
-    password = ScarletPassword()
-    uid = ScarletUID()
-    email = ScarletEmail()
-    token = ScarletToken()
+    username: 'ScarletUsername' = ScarletUsername()
+    password: 'ScarletPassword' = ScarletPassword()
+    uid: 'ScarletUID' = ScarletUID()
+    email: 'ScarletEmail' = ScarletEmail()
+    token: 'ScarletToken' = ScarletToken()
 
 
     def __init__(self, *args, **kwargs) -> 'ScarletUser':
@@ -115,6 +115,9 @@ class ScarletUser:
     def __repr__(self):
         desc = ''.join(["\n\t"+ f'{attr}={getattr(self, attr)}' for attr in self.attributes])
         return f"ScarletUser({desc}\n)"
+    
+    def __dict__(self) -> dict[str, str]:
+        return self.normalize()
 
     def normalize(self) -> dict[str, str]:
         return {
@@ -142,7 +145,7 @@ class ScarletUser:
                 return ScarletUser.from_dict(json.load(r))
     
     @staticmethod
-    def from_dict(data: dict) -> dict:
+    def from_dict(data: dict) -> 'ScarletUser':
         user = ScarletUser()
         for key in data.keys():
             if key in ScarletUser.attributes:
