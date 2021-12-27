@@ -27,6 +27,8 @@ class Scarlet:
 
     _docs_regex = re.compile(r"OK. Redirecting to (http.+)")
 
+    current_user: 'Union[ScarletUser, None]'
+
     def __init__(self, user=None):
         self.current_user: 'ScarletUser' = user
 
@@ -71,7 +73,8 @@ class Scarlet:
             }) as res:
                 print(res.status)
                 if res.status == 200:
-                    return ScarletUser(await res.json())
+                    data = await res.json(encoding='utf-8')
+                    return ScarletUser(data)
                 else:
                     raise Exception("returned unknown status code")
 
@@ -112,13 +115,16 @@ class Scarlet:
 
     async def get_user(self, user_id: str):
         async with aiohttp.ClientSession() as session:
+            print('created session')
             async with session.get(url=f"{self.base}/users/{user_id}",
-                data=self.current_user.create_body(["username", 'password', 'token'])) as res:
-                return res.json()
+                data=self.current_user.create_body(["username", 'password', 'token']), allow_redirects=False, timeout=5) as res:
+                print(res.status)
+                print(await res.text())
+                return await res.json()
 
-    def sync_get_user(self, user_id: str):
+    def sync_get_user(self, user_id: str, **kwargs):
         res = requests.get(f"{self.base}/users/{user_id}", json=True, 
-            data=self.current_user.create_body(["username", 'password', 'token']))
+            data=self.current_user.create_body(["username", 'password', 'token']), **kwargs)
         return res.json()
 
     async def sentience(self, content: str, ai_token: str = None) -> AIResponse:
