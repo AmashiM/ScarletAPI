@@ -17,6 +17,6 @@ class AIResponse:
     _attrs = ['score', 'flagged', 'status', 'words', 'message']
     def __init__(self, data: dict) -> "AIResponse":
         for key in data.keys():
-            setattr(self, key)
+            setattr(self, key, data[key])
         self.raw = data
         

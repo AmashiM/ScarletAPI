@@ -10,8 +10,12 @@ async def run():
         user=ScarletUser.from_file(".user.json")
     )
 
-    res = await scarlet.docs()
-    print(res)
+    ai_token=os.environ["AI_TOKEN"]
+
+    print(scarlet.current_user)
+
+    res = await scarlet.sentience("Hello BitchAss Cynt", ai_token=ai_token)
+    print(res.raw)
     
     
 asyncio.run(run())

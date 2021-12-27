@@ -91,7 +91,6 @@ class Scarlet:
             "token": ai_token,
             "content": content
         })
-        print(res.json())
 
-        return res
+        return AIResponse(res.json())
 
