@@ -1,3 +1,4 @@
+from requests.sessions import extract_cookies_to_jar
 from scarlet import Scarlet, ScarletUser
 from dotenv import load_dotenv
 import asyncio
@@ -6,16 +7,14 @@ load_dotenv()
 
 
 async def run():
-    scarlet = Scarlet(
-        user=ScarletUser.from_file(".user.json")
-    )
-
-    ai_token=os.environ["AI_TOKEN"]
-
-    print(scarlet.current_user)
-
-    res = await scarlet.sentience("Hello BitchAss Cynt", ai_token=ai_token)
-    print(res.raw)
+    user = await Scarlet.create("Amashi", "JEM139851", "amashisenpai386@gmail.com")
+    print(user)
     
-    
-asyncio.run(run())
+loop = asyncio.get_event_loop()
+
+try:
+    loop.run_until_complete(run())
+except Exception as err:
+    print(err)
+    loop.close()
+    exit()

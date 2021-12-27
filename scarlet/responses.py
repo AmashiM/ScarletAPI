@@ -19,4 +19,10 @@ class AIResponse:
         for key in data.keys():
             setattr(self, key, data[key])
         self.raw = data
-        
+
+class DocsResponse:
+    url: str
+    def __init__(self, data):
+        for key in data.keys():
+            setattr(self, key, data[key])
+        self.raw = data
